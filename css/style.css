@@ -1,0 +1,24 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+#map {
+    height: 100%;
+    width: 100%;
+}
+#clearElement{
+    width: 30px;
+    height: 20px;
+    background-color: white;
+    text-align: center;
+    z-index: 1;
+}
+
+.remove-btn {
+    top: 80px !important;
+    left: auto !important;
+    right: 0;
+    padding: 5px;
+
+}

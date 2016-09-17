@@ -22,7 +22,7 @@ function initMap() {
     controlDiv.className += 'remove-btn';
     removeControl(controlDiv);
     exportControl(controlDiv);
-    importControl(controlDiv);
+    importControl(controlDiv, map);
 
     controlDiv.index = 1;
     map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlDiv);
@@ -36,9 +36,10 @@ function getCurrentLocation(map) {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             };
-
+          //  infoWindow.setAttribute('id','currentLocation');
             infoWindow.setPosition(pos);
             infoWindow.setContent('My location ' + pos.lat.toFixed(2) + ' ' + pos.lng.toFixed(2));
+          //  infoWindow.style.color = 'red';
             map.setCenter(pos);
         }, function () {
             handleLocationError(true, infoWindow, map.getCenter());
@@ -60,7 +61,7 @@ function addDrawInstruments(map) {
         drawingControl: true,
         drawingControlOptions: {
             position: google.maps.ControlPosition.RIGHT_TOP,
-            style: google.maps.ZoomControlStyle.SMALL,
+            style: google.maps.ZoomControlStyle.LARGE,
             drawingModes: [
                 google.maps.drawing.OverlayType.POLYGON
             ]
@@ -78,15 +79,11 @@ function addDrawInstruments(map) {
 
 function removeControl(controlDiv) {
 
-    // Set CSS for the control border.
     const controlUI = document.createElement('div');
-    controlUI.style.backgroundColor = '#fff';
-    controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-    controlUI.style.cursor = 'pointer';
-    controlUI.style.textAlign = 'center';
+    controlUI.setAttribute('id','controlUI');
+    controlUI.setAttribute('title', 'Clear All Polygons from Map');
     controlDiv.appendChild(controlUI);
 
-    // Set CSS for the control interior.
     const controlText = document.createElement('span');
     controlText.className += 'lnr lnr-trash';
     controlUI.appendChild(controlText);
@@ -100,15 +97,11 @@ function removeControl(controlDiv) {
 }
 function exportControl(controlDiv) {
 
-    // Set CSS for the control border.
     const controlUI = document.createElement('div');
-    controlUI.style.backgroundColor = '#fff';
-    controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-    controlUI.style.cursor = 'pointer';
-    controlUI.style.textAlign = 'center';
+    controlUI.setAttribute('id','controlUI');
+    controlUI.setAttribute('title', 'Export coordinates to HTML');
     controlDiv.appendChild(controlUI);
 
-    // Set CSS for the control interior.
     const controlText = document.createElement('span');
     controlText.className += 'lnr lnr-exit-up';
     controlUI.appendChild(controlText);
@@ -118,27 +111,32 @@ function exportControl(controlDiv) {
             lat: item.lat(),
             lng: item.lng(),
         })));
-        window.opener.document.getElementById('polygons').appendChild(document.createTextNode(JSON.stringify(arr)));
+        window.opener.document.getElementById('polygons').innerHTML = JSON.stringify(arr);
         console.log(arr);
     });
 }
-function importControl(controlDiv) {
+function importControl(controlDiv, map) {
 
-    // Set CSS for the control border.
     const controlUI = document.createElement('div');
-    controlUI.style.backgroundColor = '#fff';
-    controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-    controlUI.style.cursor = 'pointer';
-    controlUI.style.textAlign = 'center';
+    controlUI.setAttribute('id','controlUI');
+    controlUI.setAttribute('title', 'Import coordinates from HTML');
     controlDiv.appendChild(controlUI);
 
-    // Set CSS for the control interior.
     const controlText = document.createElement('span');
     controlText.className += 'lnr lnr-enter-down';
     controlUI.appendChild(controlText);
 
     controlUI.addEventListener('click', function() {
-        console.log(JSON.parse(window.opener.document.getElementById('polygons').innerHTML));
+        const data = JSON.parse(window.opener.document.getElementById('polygons').innerHTML);
+        if (data) {
+            data.forEach(polygon => {
+                const pol = new google.maps.Polygon({
+                    paths: polygon
+                });
+                pol.setMap(map)
+                polygons.push(pol);
+            });
+        }        
     });
 }
 

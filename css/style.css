@@ -3,10 +3,12 @@ html, body {
     margin: 0;
     padding: 0;
 }
+
 #map {
     height: 100%;
     width: 100%;
 }
+
 #clearElement{
     width: 30px;
     height: 20px;
@@ -14,6 +16,20 @@ html, body {
     text-align: center;
     z-index: 1;
 }
+#controlUI{
+    width: 32px;
+    height: 32px;
+    border-radius: 20px;
+    margin-top: 5px;
+    margin-right: 5px;
+    background: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,.3);
+    cursor: pointer;
+    text-align: center;
+}
+/*#currentLocation{
+    color: blue;
+}*/
 
 .remove-btn {
     top: 80px !important;
@@ -23,9 +39,10 @@ html, body {
 }
 
 .remove-btn > div {
-    float: right;
+    /*float: right;*/
 }
 
 .lnr {
+    line-height: 29px !important;
     font-size: 20px;
 }

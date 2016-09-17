@@ -17,12 +17,12 @@ function initMap() {
     });
     getCurrentLocation(map);
     addDrawInstruments(map);
-    addClearElement();
 
     const controlDiv = document.createElement('div');
     controlDiv.className += 'remove-btn';
-    addClearElement(controlDiv);
-    const centerControl = new CenterControl(controlDiv, map);
+    removeControl(controlDiv);
+    exportControl(controlDiv);
+    importControl(controlDiv);
 
     controlDiv.index = 1;
     map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlDiv);
@@ -76,16 +76,10 @@ function addDrawInstruments(map) {
     });
 }
 
-function addClearElement(controlsDiv) {
-    const clearElement = document.createElement('div');
-    clearElement.getAttribute('id','clearElement');
-
-}
-
-function CenterControl(controlDiv) {
+function removeControl(controlDiv) {
 
     // Set CSS for the control border.
-    var controlUI = document.createElement('div');
+    const controlUI = document.createElement('div');
     controlUI.style.backgroundColor = '#fff';
     controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
     controlUI.style.cursor = 'pointer';
@@ -93,7 +87,7 @@ function CenterControl(controlDiv) {
     controlDiv.appendChild(controlUI);
 
     // Set CSS for the control interior.
-    var controlText = document.createElement('span');
+    const controlText = document.createElement('span');
     controlText.className += 'lnr lnr-trash';
     controlUI.appendChild(controlText);
 
@@ -103,7 +97,49 @@ function CenterControl(controlDiv) {
         });
         polygons = [];
     });
+}
+function exportControl(controlDiv) {
 
+    // Set CSS for the control border.
+    const controlUI = document.createElement('div');
+    controlUI.style.backgroundColor = '#fff';
+    controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+    controlUI.style.cursor = 'pointer';
+    controlUI.style.textAlign = 'center';
+    controlDiv.appendChild(controlUI);
+
+    // Set CSS for the control interior.
+    const controlText = document.createElement('span');
+    controlText.className += 'lnr lnr-exit-up';
+    controlUI.appendChild(controlText);
+
+    controlUI.addEventListener('click', function() {
+        let arr = polygons.map(polygon => polygon.getPath().getArray().map(item => ({
+            lat: item.lat(),
+            lng: item.lng(),
+        })));
+        window.opener.document.getElementById('polygons').appendChild(document.createTextNode(JSON.stringify(arr)));
+        console.log(arr);
+    });
+}
+function importControl(controlDiv) {
+
+    // Set CSS for the control border.
+    const controlUI = document.createElement('div');
+    controlUI.style.backgroundColor = '#fff';
+    controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+    controlUI.style.cursor = 'pointer';
+    controlUI.style.textAlign = 'center';
+    controlDiv.appendChild(controlUI);
+
+    // Set CSS for the control interior.
+    const controlText = document.createElement('span');
+    controlText.className += 'lnr lnr-enter-down';
+    controlUI.appendChild(controlText);
+
+    controlUI.addEventListener('click', function() {
+        console.log(JSON.parse(window.opener.document.getElementById('polygons').innerHTML));
+    });
 }
 
 

@@ -20,5 +20,12 @@ html, body {
     left: auto !important;
     right: 0;
     padding: 5px;
+}
 
+.remove-btn > div {
+    float: right;
+}
+
+.lnr {
+    font-size: 20px;
 }

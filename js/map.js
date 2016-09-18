@@ -17,20 +17,17 @@ function initMap() {
     });
     getCurrentLocation(map);
 
-     const controlDiv = document.createElement('div');
-     controlDiv.className += 'controlDiv';
-     const drawingManager = drawControl(controlDiv, map);
-     dragControl(controlDiv, drawingManager);
+    const controlDiv = document.createElement('div');
+    controlDiv.className += 'controlDiv';
+    const drawingManager = drawControl(controlDiv, map);
+    dragControl(controlDiv, drawingManager);
     removeControl(controlDiv);
     exportControl(controlDiv);
     importControl(controlDiv, map);
 
-     map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlDiv);
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlDiv);
 }
 
-function found(op){
-    console.log(op.latitude);
-}
 
 function getCurrentLocation(map) {
     const infoWindow = new google.maps.InfoWindow({map: map});
@@ -41,9 +38,9 @@ function getCurrentLocation(map) {
                 lng: position.coords.longitude
             };
             infoWindow.setPosition(pos);
-            infoWindow.setContent('My location ' + pos.lat.toFixed(2) + ' ' + pos.lng.toFixed(2));
+            infoWindow.setContent('Current location ' + pos.lat.toFixed(2) + ' ' + pos.lng.toFixed(2));
             map.setCenter(pos);
-        }, function () {
+        }, function (failure) {
             handleLocationError(true, infoWindow, map.getCenter());
         });
     } else {
@@ -83,10 +80,6 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     drawingManager.setMap(map);
     google.maps.event.addListener(drawingManager, 'polygoncomplete', function(polygon) {
         polygons.push(polygon);
-        console.log(polygon.getPath().getArray().map(item => ({
-            lat: item.lat(),
-            lng: item.lng(),
-        })));
     });
     return drawingManager;
 }
@@ -146,7 +139,6 @@ function exportControl(controlDiv) {
             lng: item.lng(),
         })));
         window.opener.document.getElementById('polygons').innerHTML = JSON.stringify(arr);
-        console.log(arr);
     });
 }
 function importControl(controlDiv, map) {

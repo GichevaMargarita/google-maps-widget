@@ -16,7 +16,10 @@ html, body {
     text-align: center;
     z-index: 1;
 }
-#controlUI{
+
+.controlUI{
+    position: absolute;
+    right: 5px;
     width: 32px;
     height: 32px;
     border-radius: 20px;
@@ -28,6 +31,21 @@ html, body {
     text-align: center;
 }
 
+#drag{
+    top: 45px;
+}
+
+#remove{
+    top: 87px;
+}
+
+#export{
+    top: 129px;
+}
+
+#import{
+    top: 170px;
+}
 .controlDiv {
     top: 40px !important;
     left: auto !important;

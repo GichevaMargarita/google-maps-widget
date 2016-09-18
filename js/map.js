@@ -17,15 +17,19 @@ function initMap() {
     });
     getCurrentLocation(map);
 
-    const controlDiv = document.createElement('div');
-    controlDiv.className += 'controlDiv';
-    const drawingManager = drawControl(controlDiv, map);
-    dragControl(controlDiv, drawingManager);
+     const controlDiv = document.createElement('div');
+     controlDiv.className += 'controlDiv';
+     const drawingManager = drawControl(controlDiv, map);
+     dragControl(controlDiv, drawingManager);
     removeControl(controlDiv);
     exportControl(controlDiv);
     importControl(controlDiv, map);
 
-    map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlDiv);
+     map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlDiv);
+}
+
+function found(op){
+    console.log(op.latitude);
 }
 
 function getCurrentLocation(map) {
@@ -58,7 +62,8 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     function drawControl(controlDiv, map) {
 
     const controlUI = document.createElement('div');
-    controlUI.setAttribute('id','controlUI');
+    controlUI.setAttribute('class','controlUI');
+    controlUI.setAttribute('id', 'draw');
     controlUI.setAttribute('title', 'Draw Polygon');
     controlDiv.appendChild(controlUI);
 
@@ -89,7 +94,8 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 
 function dragControl(controlDiv, drawingManager) {
     const controlUI = document.createElement('div');
-    controlUI.setAttribute('id','controlUI');
+    controlUI.setAttribute('class','controlUI');
+    controlUI.setAttribute('id', 'drag');
     controlUI.setAttribute('title', 'Drag Map');
     controlDiv.appendChild(controlUI);
 
@@ -106,7 +112,8 @@ function dragControl(controlDiv, drawingManager) {
 function removeControl(controlDiv) {
 
     const controlUI = document.createElement('div');
-    controlUI.setAttribute('id','controlUI');
+    controlUI.setAttribute('class','controlUI');
+    controlUI.setAttribute('id', 'remove');
     controlUI.setAttribute('title', 'Clear All Polygons from Map');
     controlDiv.appendChild(controlUI);
 
@@ -124,7 +131,8 @@ function removeControl(controlDiv) {
 function exportControl(controlDiv) {
 
     const controlUI = document.createElement('div');
-    controlUI.setAttribute('id','controlUI');
+    controlUI.setAttribute('class','controlUI');
+    controlUI.setAttribute('id', 'export');
     controlUI.setAttribute('title', 'Export coordinates to HTML');
     controlDiv.appendChild(controlUI);
 
@@ -144,7 +152,8 @@ function exportControl(controlDiv) {
 function importControl(controlDiv, map) {
 
     const controlUI = document.createElement('div');
-    controlUI.setAttribute('id','controlUI');
+    controlUI.setAttribute('class','controlUI');
+    controlUI.setAttribute('id', 'import');
     controlUI.setAttribute('title', 'Import coordinates from HTML');
     controlDiv.appendChild(controlUI);
 

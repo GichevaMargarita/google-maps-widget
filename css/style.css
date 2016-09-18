@@ -27,22 +27,15 @@ html, body {
     cursor: pointer;
     text-align: center;
 }
-/*#currentLocation{
-    color: blue;
-}*/
 
-.remove-btn {
-    top: 80px !important;
+.controlDiv {
+    top: 40px !important;
     left: auto !important;
     right: 0;
     padding: 5px;
 }
 
-.remove-btn > div {
-    /*float: right;*/
-}
-
 .lnr {
-    line-height: 29px !important;
+    line-height: 30px !important;
     font-size: 20px;
 }

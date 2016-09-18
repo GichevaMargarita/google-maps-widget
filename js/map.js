@@ -16,17 +16,15 @@ function initMap() {
         zoomControl: true
     });
     getCurrentLocation(map);
-    //addDrawInstruments(map);
 
     const controlDiv = document.createElement('div');
-    controlDiv.className += 'remove-btn';
+    controlDiv.className += 'controlDiv';
+    const drawingManager = drawControl(controlDiv, map);
+    dragControl(controlDiv, drawingManager);
     removeControl(controlDiv);
     exportControl(controlDiv);
     importControl(controlDiv, map);
-    const drawingManager = drawControl(controlDiv, map);
-    dragControl(controlDiv, drawingManager);
 
-    controlDiv.index = 1;
     map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlDiv);
 }
 
@@ -38,10 +36,8 @@ function getCurrentLocation(map) {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             };
-          //  infoWindow.setAttribute('id','currentLocation');
             infoWindow.setPosition(pos);
             infoWindow.setContent('My location ' + pos.lat.toFixed(2) + ' ' + pos.lng.toFixed(2));
-          //  infoWindow.style.color = 'red';
             map.setCenter(pos);
         }, function () {
             handleLocationError(true, infoWindow, map.getCenter());
@@ -51,6 +47,7 @@ function getCurrentLocation(map) {
     }
 }
 
+
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
         infoWindow.setPosition(pos);
         infoWindow.setContent(browserHasGeolocation ?
@@ -58,17 +55,26 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
             'Error: Your browser doesn\'t support geolocation.');
     }
 
-/*function addDrawInstruments(map) {
+    function drawControl(controlDiv, map) {
+
+    const controlUI = document.createElement('div');
+    controlUI.setAttribute('id','controlUI');
+    controlUI.setAttribute('title', 'Draw Polygon');
+    controlDiv.appendChild(controlUI);
+
+    const controlText = document.createElement('span');
+    controlText.className += 'lnr lnr-pencil';
+    controlUI.appendChild(controlText);
+
     const drawingManager = new google.maps.drawing.DrawingManager({
-     //   drawingControl: true,
-        drawingControlOptions: {
-            position: google.maps.ControlPosition.RIGHT_TOP,
-            style: google.maps.ZoomControlStyle.LARGE,
-            rawingModes: [
-                google.maps.drawing.OverlayType.POLYGON
-            ]
-        }
+        drawingControl: false,
     });
+
+    controlUI.addEventListener('click', function() {
+        drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);       
+    });
+
+
     drawingManager.setMap(map);
     google.maps.event.addListener(drawingManager, 'polygoncomplete', function(polygon) {
         polygons.push(polygon);
@@ -77,7 +83,25 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
             lng: item.lng(),
         })));
     });
-}*/
+    return drawingManager;
+}
+
+
+function dragControl(controlDiv, drawingManager) {
+    const controlUI = document.createElement('div');
+    controlUI.setAttribute('id','controlUI');
+    controlUI.setAttribute('title', 'Drag Map');
+    controlDiv.appendChild(controlUI);
+
+    const controlText = document.createElement('span');
+    controlText.className += 'lnr lnr-hand';
+    controlUI.appendChild(controlText);
+
+    controlUI.addEventListener('click', function() {
+        drawingManager.setDrawingMode(null);       
+    });
+}
+
 
 function removeControl(controlDiv) {
 
@@ -142,52 +166,6 @@ function importControl(controlDiv, map) {
     });
 }
 
-function drawControl(controlDiv, map) {
-
-    const controlUI = document.createElement('div');
-    controlUI.setAttribute('id','controlUI');
-    controlUI.setAttribute('title', 'Draw Polygon');
-    controlDiv.appendChild(controlUI);
-
-    const controlText = document.createElement('span');
-    controlText.className += 'lnr lnr-pencil';
-    controlUI.appendChild(controlText);
-
-    const drawingManager = new google.maps.drawing.DrawingManager({
-        drawingControl: false,
-    });
-
-    controlUI.addEventListener('click', function() {
-        drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);       
-    });
-
-
-    drawingManager.setMap(map);
-    google.maps.event.addListener(drawingManager, 'polygoncomplete', function(polygon) {
-        polygons.push(polygon);
-        console.log(polygon.getPath().getArray().map(item => ({
-            lat: item.lat(),
-            lng: item.lng(),
-        })));
-    });
-    return drawingManager;
-}
-
-
-function dragControl(controlDiv, drawingManager) {
-    const controlUI = document.createElement('div');
-    controlUI.setAttribute('id','controlUI');
-    controlUI.setAttribute('title', 'Drag Map');
-    controlDiv.appendChild(controlUI);
-
-    const controlText = document.createElement('span');
-    controlText.className += 'lnr lnr-hand';
-    controlUI.appendChild(controlText);
-
-    controlUI.addEventListener('click', function() {
-        drawingManager.setDrawingMode(null);       
-    });
-}
 
 
 
